@@ -1,0 +1,12 @@
+[package]
+name = "ryaml"
+version = "0.1.0"
+authors = ["Daniele Esposti <daniele.esposti@corp.badoo.com>"]
+
+[lib]
+name = "ryaml"
+crate-type = ["dylib"]
+
+[dependencies]
+cpython = "^0.0.5"
+interpolate_idents = "^0.1"
