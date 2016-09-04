@@ -8,6 +8,10 @@ name = "ryaml"
 crate-type = ["dylib"]
 
 [dependencies]
-cpython = { git = "https://github.com/dgrunwald/rust-cpython.git" }
 interpolate_idents = "^0.1"
 yaml-rust = "^0.3"
+
+[dependencies.cpython]
+git = "https://github.com/dgrunwald/rust-cpython.git"
+default-features = false
+features = ["python27-sys"]
