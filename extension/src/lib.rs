@@ -112,12 +112,7 @@ fn safe_load(py: Python, stream: PyString) -> PyResult<PyObject> {
     Ok(result)
 }
 
-fn test(py: Python) -> PyResult<PyObject> {
-    Ok(py.None())
-}
-
 py_module_initializer!(ryaml, initryaml, PyInit_ryaml, |py, m| {
     try!(m.add(py, "safe_load", py_fn!(py, safe_load(stream: PyString))));
-    try!(m.add(py, "test", py_fn!(py, test())));
     Ok(())
 });
