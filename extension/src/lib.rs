@@ -13,15 +13,8 @@ fn convert_yaml_to_dict(py: Python, yaml: &BTreeMap<Yaml, Yaml>) -> PyDict {
     let dict = PyDict::new(py);
 
     for (k, v) in yaml.iter() {
-        let key: PyObject = match from_yaml_to_python(py, k) {
-            Some(o) => o,
-            None => panic!("Error converting key {:?}", k)
-        };
-        let value: PyObject = match from_yaml_to_python(py, v) {
-            Some(o) => o,
-            None => panic!("Error converting value {:?}", v)
-        };
-
+        let key = from_yaml_to_python(py, k);
+        let value = from_yaml_to_python(py, v);
         let _ = dict.set_item(py, key, value);
     }
 
@@ -29,64 +22,27 @@ fn convert_yaml_to_dict(py: Python, yaml: &BTreeMap<Yaml, Yaml>) -> PyDict {
 }
 
 fn convert_yaml_to_list(py: Python, yaml: &Vec<Yaml>) -> PyList {
-    let vec: Vec<PyObject> = yaml.iter()
-        .map(|e| from_yaml_to_python(py, e).unwrap())
-        .collect();
+    let vec: Vec<PyObject> = yaml.iter().map(|e| from_yaml_to_python(py, e)).collect();
 
     PyList::new(py, &vec)
 }
 
 
-fn from_yaml_to_python(py: Python, yaml: &Yaml) -> Option<PyObject> {
-    // None
-    if yaml.is_null() {
-        return Some(py.None())
+fn from_yaml_to_python(py: Python, yaml: &Yaml) -> PyObject {
+    match yaml {
+        &Yaml::Null => py.None(),
+        &Yaml::Hash(_) => convert_yaml_to_dict(py, yaml.as_hash().unwrap()).into_object(),
+        &Yaml::String(_) => PyString::new(py, yaml.as_str().unwrap()).into_object(),
+        &Yaml::Integer(_) => yaml.as_i64().unwrap().to_py_object(py).into_object(),
+        &Yaml::Real(_) => yaml.as_f64().unwrap().to_py_object(py).into_object(),
+        &Yaml::Array(_) => convert_yaml_to_list(py, yaml.as_vec().unwrap()).into_object(),
+        &Yaml::Boolean(b) => match b {
+            true => py.True().into_object(),
+            false => py.False().into_object()
+        },
+        &Yaml::Alias(_) => unimplemented!(),  // Not supported yet http://chyh1990.github.io/yaml-rust/doc/yaml_rust/yaml/enum.Yaml.html#variant.Alias
+        &Yaml::BadValue => panic!("Bad value converting {:?}", yaml)
     }
-
-    // Hash
-    let hash = yaml.as_hash();
-    if hash.is_some() {
-        let dict = convert_yaml_to_dict(py, hash.unwrap());
-        return Some(dict.into_object())
-    }
-
-    // String
-    let string = yaml.as_str();
-    if string.is_some() {
-        let pystring = PyString::new(py, string.unwrap());
-        return Some(pystring.into_object())
-    }
-
-    // Integer
-    let int = yaml.as_i64();
-    if int.is_some() {
-        return Some(int.to_py_object(py).into_object())
-    }
-
-    // List
-    let vec = yaml.as_vec();
-    if vec.is_some() {
-        let list = convert_yaml_to_list(py, vec.unwrap());
-        return Some(list.into_object())
-    }
-
-    // Float
-    let float = yaml.as_f64();
-    if float.is_some() {
-        return Some(float.to_py_object(py).into_object())
-    }
-
-    // Boolean
-    let boolean = yaml.as_bool();
-    if boolean.is_some() {
-        match boolean.unwrap() {
-            true => return Some(py.True().into_object()),
-            false => return Some(py.False().into_object())
-        }
-    }
-
-    // Default
-    return None
 }
 
 fn safe_load(py: Python, stream: PyString) -> PyResult<PyObject> {
@@ -104,10 +60,7 @@ fn safe_load(py: Python, stream: PyString) -> PyResult<PyObject> {
     let doc = &docs[0];
 
     // Convert into proper Python's objects
-    let result: PyObject = match from_yaml_to_python(py, doc) {
-        Some(o) => o,
-        None => py.None()
-    };
+    let result = from_yaml_to_python(py, doc);
 
     Ok(result)
 }
