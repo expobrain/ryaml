@@ -67,7 +67,3 @@ class SafeLoadTests(unittest.TestCase):
         result = ryaml.safe_load(yaml)
 
         assert result == expected
-
-
-if __name__ == '__main__':
-    unittest.main()

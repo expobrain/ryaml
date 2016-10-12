@@ -1,1 +1,1 @@
-PyYAML==3.12
+git+https://github.com/novocaine/rust-python-ext.git@81674f34ddb8f6fe23d610df93a4c4b57daa222b
