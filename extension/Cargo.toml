@@ -8,5 +8,6 @@ name = "ryaml"
 crate-type = ["dylib"]
 
 [dependencies]
-cpython = "^0.0.5"
+cpython = { git = "https://github.com/dgrunwald/rust-cpython.git" }
 interpolate_idents = "^0.1"
+yaml-rust = "^0.3"
