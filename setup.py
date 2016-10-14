@@ -18,5 +18,11 @@ setup(
         'install_lib': install_lib_including_rust
     },
     # rust extensions are not zip safe, just like C-extensions.
-    zip_safe=False
+    zip_safe=False,
+    install_requires=[
+        "rust-ext>=0.1"
+    ],
+    dependency_links=[
+        "git+https://github.com/novocaine/rust-python-ext.git@81674f34ddb8f6fe23d610df93a4c4b57daa222b#egg=rust-ext-0.1"
+    ]
 )
