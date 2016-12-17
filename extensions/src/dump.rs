@@ -61,8 +61,12 @@ fn from_list_to_yaml(py: Python, py_list: &PyList) -> Yaml {
 }
 
 fn from_python_to_yaml(py: Python, obj: &PyObject) -> Yaml {
+    // Order matters
     if let Ok(list) = obj.cast_as::<PyList>(py) {
         return from_list_to_yaml(py, list)
+
+    } else if let Ok(bool) = obj.cast_as::<PyBool>(py) {
+        return from_bool_to_yaml(py, bool)
 
     } else if let Ok(int) = obj.cast_as::<PyInt>(py) {
         return from_int_to_yaml(py, int)
@@ -78,9 +82,6 @@ fn from_python_to_yaml(py: Python, obj: &PyObject) -> Yaml {
 
     } else if let Ok(float) = obj.cast_as::<PyFloat>(py) {
         return from_float_to_yaml(py, float)
-
-    } else if let Ok(bool) = obj.cast_as::<PyBool>(py) {
-        return from_bool_to_yaml(py, bool)
 
     } else if *obj == Python::None(py) {
         return Yaml::Null
