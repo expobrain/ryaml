@@ -1,8 +1,8 @@
-use std::collections::BTreeMap;
+use linked_hash_map::LinkedHashMap;
 use cpython::{PyString, Python, PyResult, PyObject, PyDict, PyList, PythonObject, ToPyObject};
 use yaml_rust::{Yaml, YamlLoader};
 
-fn convert_yaml_to_dict(py: Python, yaml: &BTreeMap<Yaml, Yaml>) -> PyDict {
+fn convert_yaml_to_dict(py: Python, yaml: &LinkedHashMap<Yaml, Yaml>) -> PyDict {
     let dict = PyDict::new(py);
 
     for (k, v) in yaml.iter() {

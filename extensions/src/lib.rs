@@ -3,6 +3,7 @@
 #![plugin(interpolate_idents)]
 
 #[macro_use] extern crate cpython;
+extern crate linked_hash_map;
 extern crate yaml_rust;
 
 mod load;

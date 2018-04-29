@@ -1,12 +1,12 @@
-use std::collections::{BTreeMap};
 use std::borrow::{Borrow};
 
+use linked_hash_map::LinkedHashMap;
 use cpython::*;
 use yaml_rust::{Yaml, YamlEmitter};
 
 fn from_dict_to_yaml(py: Python, dict: &PyDict) -> Yaml {
     let items = dict.items(py);
-    let mut hash = BTreeMap::new();
+    let mut hash = LinkedHashMap::new();
 
     for item in items.iter() {
         let k = &item.0;
@@ -96,7 +96,7 @@ pub fn safe_dump1(py: Python, py_data: PyObject) -> PyResult<PyObject> {
     safe_dump2(py, py_data, None)
 }
 
-pub fn safe_dump2(py: Python, py_data: PyObject, stream: Option<PyString>) -> PyResult<PyObject> {
+pub fn safe_dump2(py: Python, py_data: PyObject, _stream: Option<PyString>) -> PyResult<PyObject> {
     // Convert Python objects into Rust data types
     let data = from_python_to_yaml(py, &py_data);
 

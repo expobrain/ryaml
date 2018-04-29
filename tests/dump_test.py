@@ -27,7 +27,7 @@ class SafeDumpTests(unittest.TestCase):
     def test_key_is_list(self):
         data = {'array': [1, 2, 3]}
         expected = (
-            'array: \n'
+            'array:\n'
             '  - 1\n'
             '  - 2\n'
             '  - 3'
@@ -39,7 +39,7 @@ class SafeDumpTests(unittest.TestCase):
 
     def test_nested_dict(self):
         expected = (
-            'result: \n'
+            'result:\n'
             '  number: 42'
         )
         data = {'result': {'number': 42}}
