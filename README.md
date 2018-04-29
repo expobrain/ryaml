@@ -7,7 +7,6 @@ support.
 > Note that this code is not production ready and most of the features of `PyYAML` are not
 > implemented yet
 
-
 ## Build
 
 To build this package Rust nighly should be installed in your system. The best option is to install
@@ -16,7 +15,7 @@ your system.
 
 The crate `rust-cpython` uses the
 [interpolate-ident](https://github.com/SkylerLipthay/interpolate_idents) crate which uses some
-features available only on the *nightly* branch of the `rustc` compiler so you will need to install
+features available only on the _nightly_ branch of the `rustc` compiler so you will need to install
 a specific version to be able to compile the code:
 
 ```bash
@@ -29,7 +28,7 @@ Then you need to install the build requirements becasue we'll use the
 installation:
 
 ```bash
-pip install -r requirements-build.txt
+pip install -r requirements_build.txt
 ```
 
 Last step build and install the `ryaml` package:
@@ -52,17 +51,15 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 As you can see the `ryaml` module is our compiled dinamic library.
 
-
 ## Testing
 
 To run the unit tests, assuming that you already installed the `ryaml` package by following the
 instructions in the **Build** section, just run:
 
 ```bash
-pip install -r requirements-dev.txt
+pip install -r requirements_dev.txt
 py.test -xv tests.py
 ```
-
 
 ## Benchmarks
 
