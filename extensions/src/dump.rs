@@ -8,7 +8,7 @@ fn from_dict_to_yaml(py: Python, dict: &PyDict) -> Yaml {
     let items = dict.items(py);
     let mut hash = LinkedHashMap::new();
 
-    for item in items.iter() {
+    for item in items {
         let k = &item.0;
         let v = &item.1;
         let key = from_python_to_yaml(py, &k);
@@ -54,9 +54,9 @@ fn from_list_to_yaml(py: Python, py_list: &PyList) -> Yaml {
     Yaml::Array(
         py_list.iter(py)
             .fold(Vec::with_capacity(py_list.len(py)), |mut acc, item| {
-                let _ = acc.push(from_python_to_yaml(py, &item));
+                acc.push(from_python_to_yaml(py, &item));
 
-                return acc
+                acc
             })
     )
 }
@@ -93,11 +93,11 @@ fn from_python_to_yaml(py: Python, obj: &PyObject) -> Yaml {
     }
 }
 
-pub fn safe_dump1(py: Python, py_data: PyObject) -> PyResult<PyObject> {
+pub fn safe_dump1(py: Python, py_data: &PyObject) -> PyResult<PyObject> {
     safe_dump2(py, py_data, None)
 }
 
-pub fn safe_dump2(py: Python, py_data: PyObject, _stream: Option<PyString>) -> PyResult<PyObject> {
+pub fn safe_dump2(py: Python, py_data: &PyObject, _stream: Option<&PyString>) -> PyResult<PyObject> {
     // Convert Python objects into Rust data types
     let data = from_python_to_yaml(py, &py_data);
 
