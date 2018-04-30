@@ -3,15 +3,14 @@ use cpython::{PyString, Python, PyResult, PyObject, PyDict, PyList, PythonObject
 use yaml_rust::{Yaml, YamlLoader};
 
 fn convert_yaml_to_dict(py: Python, yaml: &LinkedHashMap<Yaml, Yaml>) -> PyDict {
-    let dict = PyDict::new(py);
-
-    for (k, v) in yaml.iter() {
+    yaml.iter().fold(PyDict::new(py), |acc, (k, v)| {
         let key = from_yaml_to_python(py, k);
         let value = from_yaml_to_python(py, v);
-        let _ = dict.set_item(py, key, value);
-    }
 
-    dict
+        let _ = acc.set_item(py, key, value);
+
+        return acc
+    })
 }
 
 fn convert_yaml_to_list(py: Python, yaml: &Vec<Yaml>) -> PyList {

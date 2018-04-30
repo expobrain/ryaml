@@ -51,13 +51,14 @@ fn from_bool_to_yaml(_: Python, py_bool: &PyBool) -> Yaml {
 }
 
 fn from_list_to_yaml(py: Python, py_list: &PyList) -> Yaml {
-    let mut vec = Vec::with_capacity(py_list.len(py));
+    Yaml::Array(
+        py_list.iter(py)
+            .fold(Vec::with_capacity(py_list.len(py)), |mut acc, item| {
+                let _ = acc.push(from_python_to_yaml(py, &item));
 
-    for item in py_list.iter(py) {
-        vec.push(from_python_to_yaml(py, &item));
-    }
-
-    Yaml::Array(vec)
+                return acc
+            })
+    )
 }
 
 fn from_python_to_yaml(py: Python, obj: &PyObject) -> Yaml {
