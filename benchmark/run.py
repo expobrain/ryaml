@@ -8,23 +8,37 @@ import ryaml
 # Be sure that PyYAML is usign the libyaml extension
 assert(yaml.__with_libyaml__ is True)
 
-# Disable GC to not influence the benchmark
-gc.disable()
+from yaml import CSafeLoader
 
 print('Loading test data...')
 data = open(os.path.join(os.path.dirname(__file__), 'data.yaml')).read()
 
 print('Starting benchmark...')
-for mod in (yaml, ryaml):
-    # Decode speed
-    start = datetime.now()
-    decoded = mod.safe_load(data)
-    end = datetime.now()
-    print("{} decode time: {}".format(mod.__name__, end - start))
 
-    # Encode speed
-    start = datetime.now()
-    mod.safe_dump(decoded)
-    end = datetime.now()
+# YAML
+# Decode speed
+start = datetime.now()
+decoded = yaml.load(data, Loader=CSafeLoader)
+end = datetime.now()
+print("{} decode time: {}".format(yaml.__name__, end - start))
 
-    print("{} encode time: {}".format(mod.__name__, end - start))
+# Encode speed
+start = datetime.now()
+yaml.safe_dump(decoded)
+end = datetime.now()
+
+print("{} encode time: {}".format(yaml.__name__, end - start))
+
+# rYAML
+# Decode speed
+start = datetime.now()
+decoded = ryaml.safe_load(data)
+end = datetime.now()
+print("{} decode time: {}".format(ryaml.__name__, end - start))
+
+# Encode speed
+start = datetime.now()
+ryaml.safe_dump(decoded)
+end = datetime.now()
+
+print("{} encode time: {}".format(ryaml.__name__, end - start))
