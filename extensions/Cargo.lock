@@ -141,9 +141,9 @@ checksum = "2d315eee3b34aca4797b2da6b13ed88266e6d612562a0c46390af8299fc699bc"
 
 [[package]]
 name = "yaml-rust"
-version = "0.4.0"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "57ab38ee1a4a266ed033496cf9af1828d8d6e6c1cfa5f643a2809effcae4d628"
+checksum = "fe0fad48adbecafa9588846b38af3f015ccaef0a79d92f9b2892dd310aa9f9e1"
 dependencies = [
  "linked-hash-map",
 ]
